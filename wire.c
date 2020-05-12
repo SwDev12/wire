@@ -36,7 +36,7 @@ unsigned diameter(unsigned start, unsigned exclude)
     stack_elem[stack_top++] = put;
     while (stack_top != 0) {
         get = stack_elem[--stack_top];
-        for (unsigned edges = 0; edges < links[get.to]; edges++) {
+        for (register unsigned edges = 0; edges < links[get.to]; edges++) {
             diameter_tmp = table[get.to][edges];
             if (visited[diameter_tmp.to] == 0) {
                 put.to = diameter_tmp.to;
@@ -63,7 +63,7 @@ unsigned diameter(unsigned start, unsigned exclude)
     stack_elem[stack_top++] = put;
     while (stack_top != 0) {
         get = stack_elem[--stack_top];
-        for (unsigned edges = 0; edges < links[get.to]; edges++) {
+        for (register unsigned edges = 0; edges < links[get.to]; edges++) {
             diameter_tmp = table[get.to][edges];
             if (visited[diameter_tmp.to] == 0) {
                 put.to = diameter_tmp.to;
@@ -94,9 +94,11 @@ void solving(void)
     for (unsigned i = 1; i <= vertices; i++) {
         for (unsigned l = 0; l < links[i]; l++) {
             tmp = table[i][l];
-            check = diameter(i, tmp.to) + diameter(tmp.to, i) + tmp.w;
-            if (answer < check) {
-                answer = check;
+            if (i < tmp.to) {
+                check = diameter(i, tmp.to) + diameter(tmp.to, i) + tmp.w;
+                if (answer < check) {
+                    answer = check;
+                }
             }
         }
     }
