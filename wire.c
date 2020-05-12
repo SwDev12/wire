@@ -21,12 +21,12 @@ struct elem {
 } stack_elem[VERTICES];
 unsigned stack_top;
 struct v tmp, diameter_tmp;
-unsigned max_path, max_path_v, check;
+unsigned check;
 
 unsigned diameter(unsigned start, unsigned exclude)
 {
     struct elem put, get;
-    max_path = max_path_v = 0;
+    register unsigned max_path = 0, max_path_v = 0;
 //    printf("start = %u, exclude = %u\n", start, exclude);
     put.to = start;
     put.len_to_source = 0;
@@ -43,11 +43,11 @@ unsigned diameter(unsigned start, unsigned exclude)
                 put.len_to_source = get.len_to_source + diameter_tmp.w;
                 visited[put.to] = 1;
                 stack_elem[stack_top++] = put;
-                if (links[put.to] == 1) {
-                    if (max_path < put.len_to_source) {
-                        max_path_v = put.to;
-                        max_path = put.len_to_source;
-                    }
+                if (links[put.to] == 1 && max_path < put.len_to_source) {
+//                    if (max_path < put.len_to_source) {
+                    max_path_v = put.to;
+                    max_path = put.len_to_source;
+//                    }
                 }
             }
         }
@@ -70,11 +70,11 @@ unsigned diameter(unsigned start, unsigned exclude)
                 put.len_to_source = get.len_to_source + diameter_tmp.w;
                 visited[put.to] = 1;
                 stack_elem[stack_top++] = put;
-                if (links[put.to] == 1) {
-                    if (max_path < put.len_to_source) {
-                        max_path_v = put.to;
-                        max_path = put.len_to_source;
-                    }
+                if (links[put.to] == 1 && max_path < put.len_to_source) {
+//                    if (max_path < put.len_to_source) {
+                    max_path_v = put.to;
+                    max_path = put.len_to_source;
+//                    }
                 }
             }
         }
@@ -92,7 +92,7 @@ void solving(void)
     answer = 0;
 
     for (unsigned i = 1; i <= vertices; i++) {
-        for (unsigned l = 0; l < links[i]; l++) {
+        for (register unsigned l = 0; l < links[i]; l++) {
             tmp = table[i][l];
             if (i < tmp.to) {
                 check = diameter(i, tmp.to) + diameter(tmp.to, i) + tmp.w;
