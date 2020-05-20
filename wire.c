@@ -46,6 +46,7 @@ void deep(unsigned start)
     visited[start] = 1;
     put.to = start;
     put.len_to_source = 0;
+    put.prev_vert = 0;
     stack_elem[stack_top++] = put;
     while (stack_top != 0) {
         get = stack_elem[--stack_top];
@@ -53,11 +54,11 @@ void deep(unsigned start)
         for (unsigned edges = 0; edges < links[get.to]; edges++) {
             edge = table[get.to][edges];
 //            printf("edge.to = %u, edge.w = %u\n", edge.to, edge.w);
-            if (visited[edge.to] == 0) {
+            if (get.prev_vert != edge.to) {
 //                printf("edge.to = %u, edge.w = %u\n", edge.to, edge.w);
                 put.to = edge.to;
                 put.len_to_source = get.len_to_source + edge.w;
-//                put.prev_vert = get.to;
+                put.prev_vert = get.to;
 //                put.first_vert_path = get.first_vert_path;
                 arr_adj[start][edge.to].length = arr_adj[edge.to][start].length = put.len_to_source;
                 visited[put.to] = 1;
@@ -66,9 +67,6 @@ void deep(unsigned start)
 //                printf("Try to resolve\n");
             }
         }
-    }
-    for (unsigned x = 1; x <= vertices; x++) {
-        visited[x] = 0;
     }
 }
 
