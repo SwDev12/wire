@@ -47,20 +47,6 @@ void deep(unsigned start)
     put.to = start;
     put.len_to_source = 0;
     stack_elem[stack_top++] = put;
-//    get = stack_elem[--stack_top];
-/*    for (unsigned edges = 0; edges < links[start]; edges++) {
-        edge = table[get.to][edges];
-//        printf("edge.to = %u, edge.w = %u\n", edge.to, edge.w);
-        if (visited[edge.to] == 0) {
-            put.to = edge.to;
-            put.len_to_source = edge.w;
-            put.prev_vert = get.to;
-            put.first_vert_path = edge.to;
-            visited[put.to] = 1;
-            stack_elem[stack_top++] = put;
-            arr_adj[start][edge.to].length = arr_adj[edge.to][start].length = edge.w;
-        }
-    }*/
     while (stack_top != 0) {
         get = stack_elem[--stack_top];
         printf("get.to = %u, get.len_to_source = %u\n", get.to, get.len_to_source);
