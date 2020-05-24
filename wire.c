@@ -41,6 +41,7 @@ void resolve(unsigned from, unsigned exclude)
 
 void deep(unsigned start)
 {
+//    unsigned new_length;
     stack_top = 0;
     //search paths from vertice with max edges.
     put.to = start;
@@ -48,35 +49,26 @@ void deep(unsigned start)
     put.prev_vert = 0;
     put.first_vert_path = 0;
     stack_elem[stack_top++] = put;
+    printf("start = %u\n", start);
+
     while (stack_top != 0) {
         get = stack_elem[--stack_top];
 //        printf("get.to = %u, get.len_to_source = %u, get.first_vert_path = %u, get.prev_vert = %u\n", get.to, get.len_to_source, get.first_vert_path, get.prev_vert);
         if (calculated[get.to] == 1) {
-            printf("start = %u, get.to = %u\n", start, get.to);
+/*            printf("start = %u, get.to = %u, get.prev.vert = %u, first_vert_path = %u\n", start, get.to, get.prev_vert, get.first_vert_path);
             for (unsigned x = 1; x <= vertices; x++) {
-                if (arr_adj[get.to][x].first_vert_path != get.prev_vert) {
+                if (arr_adj[get.to][x].first_vert_path != get.prev_vert && x != get.prev_vert) {
                     printf("x = %u\n", x);
                     arr_adj[start][x].length = get.len_to_source + arr_adj[get.to][x].length;
-                    arr_adj[start][x].first_vert_path = get.first_vert_path;
+                    arr_adj[start][x].first_vert_path = (get.prev_vert == start) ? start : () ;
                 }
-            }
+            }*/
             continue;
         }
 
         for (unsigned edges = 0; edges < links[get.to]; edges++) {
             edge = table[get.to][edges];
             printf("edge.to = %u, edge.w = %u\n", edge.to, edge.w);
-            if (calculated[get.to] == 1) {
-                printf("start = %u, get.to = %u\n", start, get.to);
-                for (unsigned x = 1; x <= vertices; x++) {
-                    if (arr_adj[get.to][x].first_vert_path != get.prev_vert) {
-                        printf("x = %u\n", x);
-                        arr_adj[start][x].length = get.len_to_source + arr_adj[get.to][x].length;
-                        arr_adj[start][x].first_vert_path = get.first_vert_path;
-                    }
-                }
-                continue;
-            }
             if (get.prev_vert != edge.to) {
 //                printf("edge.to = %u, edge.w = %u\n", edge.to, edge.w);
                 put.to = edge.to;
@@ -102,9 +94,9 @@ void solving(void)
     answer = 0;
     deep(max_edge_vert);
 //    deep(1);
-//    deep(2);
+    deep(2);
 //    deep(3);
-    deep(4);
+//    deep(4);
 //    deep(5);
 //    deep(7);
 //    deep(1);
