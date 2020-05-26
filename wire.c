@@ -65,7 +65,7 @@ void deep(unsigned start)
                 if (arr_adj[get.to][x].first_vert_path != get.prev_vert 
                         && (x != get.to && x != get.prev_vert)) {
                     arr_adj[start][x].length = get.len_to_source + arr_adj[get.to][x].length;
-                    arr_adj[start][x].first_vert_path = (get.first_vert_path == start) ? start : get.first_vert_path;
+                    arr_adj[start][x].first_vert_path = /*(get.first_vert_path == start) ? start : */get.first_vert_path;
                 }
             }
             continue;
