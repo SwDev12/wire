@@ -32,6 +32,7 @@ struct elem {
 unsigned stack_top;
 struct elem put, get;
 struct v edge;
+unsigned d1, d1;
 
 void resolve(unsigned from, unsigned exclude)
 {
@@ -60,9 +61,9 @@ void deep(unsigned start)
         get = stack_elem[--stack_top];
 //        printf("get.to = %u, get.len_to_source = %u, get.first_vert_path = %u, get.prev_vert = %u\n", get.to, get.len_to_source, get.first_vert_path, get.prev_vert);
         if (calculated[get.to] == 1) {
-            printf("start = %u, get.to = %u, get.prev.vert = %u, first_vert_path = %u\n", start, get.to, get.prev_vert, get.first_vert_path);
+//            printf("start = %u, get.to = %u, get.prev.vert = %u, first_vert_path = %u\n", start, get.to, get.prev_vert, get.first_vert_path);
             for (unsigned x = 1; x <= vertices; x++) {
-                if (arr_adj[get.to][x].first_vert_path != get.prev_vert 
+                if (arr_adj[get.to][x].first_vert_path != get.prev_vert
                         && (x != get.to && x != get.prev_vert)) {
                     arr_adj[start][x].length = get.len_to_source + arr_adj[get.to][x].length;
                     arr_adj[start][x].first_vert_path = /*(get.first_vert_path == start) ? start : */get.first_vert_path;
@@ -94,10 +95,28 @@ void deep(unsigned start)
     calculated[start] = 1;
 }
 
+/*unsigned get_diameter(unsigned v1, unsigned v2)
+{
+    return 0;
+}*/
+
 void solving(void)
 {
     answer = 0;
     deep(max_edge_vert);
+    for (unsigned x = 1; x < max_edge_vert; x++) {
+        deep(x);
+    }
+    for (unsigned x = max_edge_vert + 1; x <= vertices; x++) {
+        deep(x);
+    }
+    for (unsigned v = 1; v <= vertices; v++) {
+        for (unsigned edges = 0; edges < links[v]; edges++) {
+            edge = table[v][edges];
+//            d1 = get_diameter(v, edge.to);
+//            d2 = get_diameter(edge.to, v);
+        }
+    }
 //    deep(1);
 //    deep(2);
 //    deep(3);
