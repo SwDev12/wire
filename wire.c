@@ -30,6 +30,8 @@ struct elem {
     unsigned first_vert_path;
 } stack_elem[VERTICES];
 unsigned stack_top;
+unsigned leaf_list[VERTICES];
+unsigned leaf_list_cnt;
 struct elem put, get;
 struct v edge;
 unsigned d1, d1;
@@ -138,6 +140,7 @@ int main(void)
 
     for (unsigned i = 1; i < cases; i++) {
         max_edge_vert = 0;
+        leaf_list_cnt = 0;
         scanf("%u", &vertices);
         for (unsigned v = 1; v < vertices; v++) {
             scanf("%u %u %u", &weight, &from, &to);
@@ -152,6 +155,14 @@ int main(void)
             max_edge_vert = (links[max_edge_vert] > links[to]) ? max_edge_vert : to;
 //            arr_adj[from][to].length = arr_adj[to][from].length = weight;
         }
+        for (unsigned x = 1; x <= vertices; x++) {
+            if (links[x] == 1) {
+                leaf_list[leaf_list_cnt++] = x;
+            }
+        }
+/*        for (unsigned x = 0; x < leaf_list_cnt; x++) {
+            printf("leaf[%u] = %u\n", x, leaf_list[x]);
+        }*/
         solving();
         for (unsigned y = 1; y <= vertices; y++) {
             for (unsigned x = 1; x <= vertices; x++) {
