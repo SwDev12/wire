@@ -54,7 +54,7 @@ void deep(unsigned start)
         put.first_vert_path = edge.to;
         stack_elem[stack_top++] = put;
         arr_adj[start][edge.to].length = put.len_to_source;
-        arr_adj[start][edge.to].first_vert_path = start;
+        arr_adj[start][edge.to].first_vert_path = edge.to;
     }
 
     while (stack_top != 0) {
