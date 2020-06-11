@@ -20,6 +20,7 @@ unsigned calculated[VERTICES];
 
 unsigned vertices;
 unsigned answer;
+unsigned candidate;
 unsigned d1, d2;
 unsigned max_edge_vert;
 
@@ -32,6 +33,8 @@ struct elem {
 unsigned stack_top;
 unsigned leaf_list[VERTICES];
 unsigned leaf_list_cnt;
+unsigned far_leaf_list[VERTICES];
+unsigned far_leaf_list_cnt;
 struct elem put, get;
 struct v edge;
 unsigned d1, d1;
@@ -97,10 +100,30 @@ void deep(unsigned start)
     calculated[start] = 1;
 }
 
-/*unsigned get_diameter(unsigned v1, unsigned v2)
+unsigned get_diameter(unsigned from, unsigned exclude)
 {
-    return 0;
-}*/
+    unsigned diam = 0;
+    unsigned max_leaf_vert = 0;
+
+    far_leaf_list_cnt = 0;
+    for (unsigned cnt = 0; cnt < leaf_list_cnt; cnt++) {
+        if (arr_adj[from][leaf_list[cnt]].first_vert_path != exclude) {
+            if (diam < arr_adj[from][leaf_list[cnt]].length) {
+                diam = arr_adj[from][leaf_list[cnt]].length;
+                max_leaf_vert = leaf_list[cnt];
+            }
+            far_leaf_list[far_leaf_list_cnt++] = leaf_list[cnt];
+        }
+    }
+    for (unsigned cnt = 0; cnt < far_leaf_list_cnt; cnt++) {
+        if (far_leaf_list[cnt] != max_leaf_vert && diam < arr_adj[max_leaf_vert][far_leaf_list[cnt]].length) {
+            diam = arr_adj[max_leaf_vert][far_leaf_list[cnt]].length;
+        }
+    }
+//    printf("diam = %u\n", diam);
+
+    return diam;
+}
 
 void solving(void)
 {
@@ -115,18 +138,24 @@ void solving(void)
     for (unsigned v = 1; v <= vertices; v++) {
         for (unsigned edges = 0; edges < links[v]; edges++) {
             edge = table[v][edges];
-//            d1 = get_diameter(v, edge.to);
-//            d2 = get_diameter(edge.to, v);
+//            printf("from = %u, to = %u\n", v, edge.to);
+            if (v < edge.to) {
+//                printf("check edge from vert %u to %u\n", v, edge.to);
+                if (links[v] == 1) {
+                    candidate = edge.w + get_diameter(edge.to, v);
+                } else if (links[edge.to] == 1) {
+                    candidate = edge.w + get_diameter(v, edge.to);
+                } else {
+                    //Both the vert are not leafs. Possibly this condtion should be first.
+                    candidate = edge.w + get_diameter(v, edge.to) + get_diameter(edge.to, v);
+                }
+//                printf("candidate = %u\n", candidate);
+                if (answer < candidate) {
+                    answer = candidate;
+                }
+            }
         }
     }
-//    deep(1);
-//    deep(2);
-//    deep(3);
-//    deep(4);
-//    deep(5);
-//    deep(6);
-//    deep(7);
-//    deep(1);
 }
 
 int main(void)
@@ -164,13 +193,13 @@ int main(void)
             printf("leaf[%u] = %u\n", x, leaf_list[x]);
         }*/
         solving();
-        for (unsigned y = 1; y <= vertices; y++) {
+/*        for (unsigned y = 1; y <= vertices; y++) {
             for (unsigned x = 1; x <= vertices; x++) {
                 printf("%2u %2u|", arr_adj[y][x].length, arr_adj[y][x].first_vert_path);
             }
             printf("\n");
-        }
-        printf("max_edge_vert = %u\n", max_edge_vert);
+        }*/
+//        printf("max_edge_vert = %u\n", max_edge_vert);
         printf("#%u %u\n", i, answer);
         for (unsigned y = 1; y <= vertices; y++) {
             links[y] = 0;
