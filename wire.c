@@ -62,7 +62,7 @@ void deep(unsigned start)
 //        printf("get.to = %u, get.len_to_source = %u, get.first_vert_path = %u, get.prev_vert = %u\n", get.to, get.len_to_source, get.first_vert_path, get.prev_vert);
         if (calculated[get.to] == 1) {
 //            printf("start = %u, get.to = %u, get.prev.vert = %u, first_vert_path = %u\n", start, get.to, get.prev_vert, get.first_vert_path);
-            for (unsigned x = 1; x <= vertices; x++) {
+            for (register unsigned x = 1; x <= vertices; x++) {
                 if (arr_adj[get.to][x].first_vert_path != get.prev_vert
                         && (x != get.to && x != get.prev_vert)) {
                     arr_adj[start][x].length = get.len_to_source + arr_adj[get.to][x].length;
@@ -95,13 +95,13 @@ void deep(unsigned start)
     calculated[start] = 1;
 }
 
-unsigned get_diameter(unsigned from, unsigned exclude)
+unsigned get_diameter(register unsigned from, unsigned exclude)
 {
     unsigned diam = 0;
-    unsigned max_leaf_vert = 0;
+    register unsigned max_leaf_vert = 0;
 
     far_leaf_list_cnt = 0;
-    for (unsigned cnt = 0; cnt < leaf_list_cnt; cnt++) {
+    for (register unsigned cnt = 0; cnt < leaf_list_cnt; cnt++) {
         if (arr_adj[from][leaf_list[cnt]].first_vert_path != exclude) {
             if (diam < arr_adj[from][leaf_list[cnt]].length) {
                 diam = arr_adj[from][leaf_list[cnt]].length;
@@ -110,7 +110,7 @@ unsigned get_diameter(unsigned from, unsigned exclude)
             far_leaf_list[far_leaf_list_cnt++] = leaf_list[cnt];
         }
     }
-    for (unsigned cnt = 0; cnt < far_leaf_list_cnt; cnt++) {
+    for (register unsigned cnt = 0; cnt < far_leaf_list_cnt; cnt++) {
         if (far_leaf_list[cnt] != max_leaf_vert && diam < arr_adj[max_leaf_vert][far_leaf_list[cnt]].length) {
             diam = arr_adj[max_leaf_vert][far_leaf_list[cnt]].length;
         }
