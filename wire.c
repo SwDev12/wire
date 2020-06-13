@@ -40,12 +40,6 @@ struct v edge;
 unsigned d1, d1;
 unsigned max_vert;
 
-void resolve(unsigned from, unsigned exclude)
-{
-    (void)from;
-    (void)exclude;
-}
-
 void deep(unsigned start)
 {
 //    unsigned new_length;
@@ -130,12 +124,17 @@ void solving(void)
 {
     answer = 0;
     deep(max_edge_vert);
-    for (unsigned x = 1; x < max_edge_vert; x++) {
-        deep(x);
+    for (unsigned x = 1; x <= max_vert; x++) {
+        if (links[x] > 1)
+            deep(x);
     }
-    for (unsigned x = max_edge_vert + 1; x <= max_vert; x++) {
-        deep(x);
+    for (unsigned x = 1; x <= max_vert; x++) {
+        if (links[x] == 1)
+            deep(x);
     }
+/*    for (unsigned x = max_edge_vert + 1; x <= max_vert; x++) {
+        deep(x);
+    }*/
     for (unsigned v = 1; v <= max_vert; v++) {
         if (links[v] == 0) continue;
         for (unsigned edges = 0; edges < links[v]; edges++) {
