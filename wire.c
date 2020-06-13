@@ -62,11 +62,13 @@ void deep(unsigned start)
 //        printf("get.to = %u, get.len_to_source = %u, get.first_vert_path = %u, get.prev_vert = %u\n", get.to, get.len_to_source, get.first_vert_path, get.prev_vert);
         if (calculated[get.to] == 1) {
 //            printf("start = %u, get.to = %u, get.prev.vert = %u, first_vert_path = %u\n", start, get.to, get.prev_vert, get.first_vert_path);
-            for (register unsigned x = 1; x <= vertices; x++) {
-                if (arr_adj[get.to][x].first_vert_path != get.prev_vert
+            for (register unsigned x = 1; x <= max_vert; x++) {//vertices was instaed of max_vert, but it is not right.
+                if (arr_adj[get.to][x].first_vert_path != get.prev_vert //near vertices, which put in stack at line 49
                         && (x != get.to && x != get.prev_vert)) {
+                    //x !- get.to for diagonal
+                    //x != get.prev_vert to escape recalculating of other paths
                     arr_adj[start][x].length = get.len_to_source + arr_adj[get.to][x].length;
-                    arr_adj[start][x].first_vert_path = /*(get.first_vert_path == start) ? start : */get.first_vert_path;
+                    arr_adj[start][x].first_vert_path = get.first_vert_path;
                 }
             }
             continue;
@@ -198,8 +200,8 @@ int main(void)
             printf("leaf[%u] = %u\n", x, leaf_list[x]);
         }*/
         solving();
-/*        for (unsigned y = 1; y <= vertices; y++) {
-            for (unsigned x = 1; x <= vertices; x++) {
+/*        for (unsigned y = 1; y <= max_vert; y++) {
+            for (unsigned x = 1; x <= max_vert; x++) {
                 printf("%2u %2u|", arr_adj[y][x].length, arr_adj[y][x].first_vert_path);
             }
             printf("\n");
