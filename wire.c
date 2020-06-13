@@ -38,6 +38,7 @@ unsigned far_leaf_list_cnt;
 struct elem put, get;
 struct v edge;
 unsigned d1, d1;
+unsigned max_vert;
 
 void resolve(unsigned from, unsigned exclude)
 {
@@ -51,7 +52,7 @@ void deep(unsigned start)
     stack_top = 0;
 //    printf("start = %u\n", start);
 
-    for (unsigned edges = 0; edges < links[start]; edges++) {
+    for (register unsigned edges = 0; edges < links[start]; edges++) {
         edge = table[start][edges];
         put.to = edge.to;
         put.len_to_source = edge.w;
@@ -132,10 +133,11 @@ void solving(void)
     for (unsigned x = 1; x < max_edge_vert; x++) {
         deep(x);
     }
-    for (unsigned x = max_edge_vert + 1; x <= vertices; x++) {
+    for (unsigned x = max_edge_vert + 1; x <= max_vert; x++) {
         deep(x);
     }
-    for (unsigned v = 1; v <= vertices; v++) {
+    for (unsigned v = 1; v <= max_vert; v++) {
+        if (links[v] == 0) continue;
         for (unsigned edges = 0; edges < links[v]; edges++) {
             edge = table[v][edges];
 //            printf("from = %u, to = %u\n", v, edge.to);
@@ -170,6 +172,7 @@ int main(void)
     for (unsigned i = 1; i < cases; i++) {
         max_edge_vert = 0;
         leaf_list_cnt = 0;
+        max_vert = 0;
         scanf("%u", &vertices);
         for (unsigned v = 1; v < vertices; v++) {
             scanf("%u %u %u", &weight, &from, &to);
@@ -178,13 +181,16 @@ int main(void)
             table[from][idx].to = to;
             table[from][idx].w = weight;
             max_edge_vert = (links[max_edge_vert] > links[from]) ? max_edge_vert : from;
+            max_vert = (max_vert > from) ? max_vert : from;
             idx = links[to]++;
             table[to][idx].to = from;
             table[to][idx].w = weight;
             max_edge_vert = (links[max_edge_vert] > links[to]) ? max_edge_vert : to;
+            max_vert = (max_vert > to ) ? max_vert : to;
 //            arr_adj[from][to].length = arr_adj[to][from].length = weight;
         }
-        for (unsigned x = 1; x <= vertices; x++) {
+//        printf("max_vert = %u\n", max_vert);
+        for (unsigned x = 1; x <= max_vert; x++) {
             if (links[x] == 1) {
                 leaf_list[leaf_list_cnt++] = x;
             }
@@ -201,7 +207,7 @@ int main(void)
         }*/
 //        printf("max_edge_vert = %u\n", max_edge_vert);
         printf("#%u %u\n", i, answer);
-        for (unsigned y = 1; y <= vertices; y++) {
+        for (unsigned y = 1; y <= max_vert; y++) {
             links[y] = 0;
             calculated[y] = 0;
         }
